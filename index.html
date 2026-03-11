@@ -30,7 +30,7 @@
       <div class="command-card">
         <div class="cmd-header">
           <span class="cmd-name">!ahw</span>
-          <span class="cmd-args">[Google Maps Link]</span>
+          <span class="cmd-args">[Google Maps link]</span>
         </div>
         <div class="cmd-desc">Submit a location to A Hanno World, our community map.</div>
       </div>
@@ -117,7 +117,66 @@
       </div>
 
     </main>
+
+    <div class="toggle-container">
+      <button id="toggle-btn" class="more-btn">Gamble away your points</button>
+    </div>
+
+    <div id="extra-commands" class="commands-grid hidden">
+      <div class="command-card">
+        <div class="cmd-header">
+          <span class="cmd-name">!gamble</span>
+          <span class="cmd-args">[amount of points]</span>
+        </div>
+        <div class="cmd-desc">You either win some points or you lose some points.</div>
+      </div>
+
+      <div class="command-card">
+        <div class="cmd-header">
+          <span class="cmd-name">!givepoints</span>
+          <span class="cmd-args">[username]</span>
+          <span class="cmd-args">[amount of points]</span>
+        </div>
+        <div class="cmd-desc">Give away some of your points to another user.</div>
+      </div>
+
+      <div class="command-card">
+        <div class="cmd-header">
+          <span class="cmd-name">!leaderboard</span>
+        </div>
+        <div class="cmd-desc">Shows a top 5 of the people with the most points.</div>
+      </div>
+
+      <div class="command-card">
+        <div class="cmd-header">
+          <span class="cmd-name">!points</span>
+          <span class="cmd-args">[username]</span>
+        </div>
+        <div class="cmd-desc">See how many points you or someone else have.</div>
+      </div>
+    </div>
   </div>
+
+  <script>
+    const toggleBtn = document.getElementById('toggle-btn');
+    const extraCommands = document.getElementById('extra-commands');
+
+    toggleBtn.addEventListener('click', () => {
+      const isHidden = extraCommands.classList.toggle('hidden');
+      extraCommands.classList.toggle('revealed', !isHidden);
+      
+      if (isHidden) {
+        toggleBtn.textContent = 'Gamble away your points';
+      } else {
+        toggleBtn.textContent = 'Hide gambling commands';
+        // Apply staggered delays once
+        const cards = extraCommands.querySelectorAll('.command-card');
+        cards.forEach((card, index) => {
+          card.style.animationDelay = `${(index + 1) * 0.05}s`;
+        });
+      }
+    });
+  </script>
 </body>
 
 </html>
