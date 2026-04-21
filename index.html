@@ -193,26 +193,7 @@
     </div>
   </div>
 
-  <script>
-    const toggleBtn = document.getElementById('toggle-btn');
-    const extraCommands = document.getElementById('extra-commands');
-
-    toggleBtn.addEventListener('click', () => {
-      const isHidden = extraCommands.classList.toggle('hidden');
-      extraCommands.classList.toggle('revealed', !isHidden);
-      
-      if (isHidden) {
-        toggleBtn.textContent = 'Gamble away your points';
-      } else {
-        toggleBtn.textContent = 'Hide';
-        // Apply staggered delays once
-        const cards = extraCommands.querySelectorAll('.command-card');
-        cards.forEach((card, index) => {
-          card.style.animationDelay = `${(index + 1) * 0.05}s`;
-        });
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 
 </html>
