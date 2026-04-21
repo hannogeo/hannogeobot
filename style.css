@@ -136,6 +136,13 @@ body {
 .command-card:nth-child(11) { animation-delay: 0.55s; }
 .command-card:nth-child(12) { animation-delay: 0.6s; }
 .command-card:nth-child(13) { animation-delay: 0.65s; }
+.command-card:nth-child(14) { animation-delay: 0.7s; }
+.command-card:nth-child(15) { animation-delay: 0.75s; }
+.command-card:nth-child(16) { animation-delay: 0.8s; }
+.command-card:nth-child(17) { animation-delay: 0.85s; }
+.command-card:nth-child(18) { animation-delay: 0.9s; }
+.command-card:nth-child(19) { animation-delay: 0.95s; }
+.command-card:nth-child(20) { animation-delay: 1.0s; }
 
 .command-card:hover {
   transform: translateY(-8px) scale(1.02);
