@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | HannoGeoBot</title>
+  <link rel="icon" href="hannog.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="background">
+    <div class="blob blob-1"></div>
+  </div>
+
+  <div class="admin-container">
+    <!-- Login Section -->
+    <div id="login-section" class="login-card">
+      <h2>Admin Login</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required placeholder="admin@hannogeo.com">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="admin-btn">Login to Dashboard</button>
+      </form>
+      <p id="login-error" style="color: #ef4444; margin-top: 1rem; display: none;">Invalid credentials.</p>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div id="dashboard">
+      <div class="dashboard-header">
+        <h2>Command Management</h2>
+        <button id="logout-btn" class="admin-btn btn-small btn-delete" style="width: auto;">Logout</button>
+      </div>
+
+      <div style="margin-bottom: 2rem; display: flex; gap: 1rem;">
+        <button id="add-command-btn" class="admin-btn">Add New Command</button>
+        <button id="migrate-btn" class="admin-btn btn-delete" style="background: #334155;">Migrate Old Commands</button>
+      </div>
+
+      <div id="commands-list">
+        <!-- Dynamic content will go here -->
+        <p style="text-align: center; color: var(--text-secondary);">Loading commands...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Modal -->
+  <div id="command-modal" class="modal">
+    <div class="modal-content">
+      <h2 id="modal-title" style="margin-top: 0;">Add New Command</h2>
+      <form id="command-form">
+        <input type="hidden" id="command-id">
+        <div class="form-group">
+          <label for="cmd-name">Command Name (e.g. !hello)</label>
+          <input type="text" id="cmd-name" required>
+        </div>
+        <div class="form-group">
+          <label for="cmd-args">Arguments (optional)</label>
+          <input type="text" id="cmd-args">
+        </div>
+        <div class="form-group">
+          <label for="cmd-desc">Description</label>
+          <textarea id="cmd-desc" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="cmd-category">Category</label>
+          <select id="cmd-category">
+            <option value="main">Main Grid</option>
+            <option value="gamble">Gamble Section</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="cmd-order">Display Order (lower numbers show first)</label>
+          <input type="number" id="cmd-order" required value="0">
+        </div>
+        <div style="display: flex; gap: 1rem;">
+          <button type="submit" class="admin-btn">Save Command</button>
+          <button type="button" id="cancel-btn" class="admin-btn btn-delete">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

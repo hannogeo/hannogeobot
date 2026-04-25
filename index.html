@@ -26,118 +26,12 @@
       <p class="subtitle">The complete command reference for HannoGeo's Twitch bot.</p>
     </header>
 
-    <main class="commands-grid">
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!ahw</span>
-          <span class="cmd-args">[Google Maps link]</span>
-        </div>
-        <div class="cmd-desc">Submit a location to A Hanno World, our community map.</div>
-      </div>
+    <div id="loader" style="text-align: center; margin: 4rem 0;">
+      <div class="cmd-name" style="animation: pulse 1.5s infinite;">Loading Commands...</div>
+    </div>
 
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!pb</span>
-        </div>
-        <div class="cmd-desc">See what my current peak elo is on ranked duels.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!weather</span>
-          <span class="cmd-args">[city name]</span>
-        </div>
-        <div class="cmd-desc">Check the current weather. Default is Tallinn.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!time</span>
-        </div>
-        <div class="cmd-desc">See the current time in Tallinn right now.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!hug</span>
-          <span class="cmd-args">[name]</span>
-        </div>
-        <div class="cmd-desc">Give someone in chat a nice warm hug!</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!slap</span>
-          <span class="cmd-args">[name]</span>
-        </div>
-        <div class="cmd-desc">Slap someone (or the bot when it's acting up).</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!song</span>
-        </div>
-        <div class="cmd-desc">See what song is playing right now.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!discord</span>
-        </div>
-        <div class="cmd-desc">Get the invite link to our awesome Discord server.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!iq</span>
-          <span class="cmd-args">[name]</span>
-        </div>
-        <div class="cmd-desc">Find out your (or someone else's) extremely accurate IQ.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!lurk</span>
-        </div>
-        <div class="cmd-desc">Let us know you're actively supporting by lurking.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!skip</span>
-        </div>
-        <div class="cmd-desc">If 3 people use this command, the currently playing song will be automatically skipped.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!pc</span>
-        </div>
-        <div class="cmd-desc">See my amazing PC specs powering the stream.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!setup</span>
-        </div>
-        <div class="cmd-desc">Check out the devices I use for my streaming setup.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!commands</span>
-        </div>
-        <div class="cmd-desc">See all the available commands. If you're here, you probably used this one already.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!dihsize</span>
-          <span class="cmd-args">[name]</span>
-        </div>
-        <div class="cmd-desc">erm</div>
-      </div>
-
+    <main id="main-grid" class="commands-grid">
+      <!-- Dynamically populated -->
     </main>
 
     <div class="toggle-container">
@@ -145,55 +39,22 @@
     </div>
 
     <div id="extra-commands" class="commands-grid hidden">
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!gamble</span>
-          <span class="cmd-args">[amount of points]</span>
-        </div>
-        <div class="cmd-desc">You either win some points or you lose some points.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!givepoints</span>
-          <span class="cmd-args">[username]</span>
-          <span class="cmd-args">[amount of points]</span>
-        </div>
-        <div class="cmd-desc">Give away some of your points to another user.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!leaderboard</span>
-        </div>
-        <div class="cmd-desc">Shows a top 5 of the people with the most points.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!points</span>
-          <span class="cmd-args">[username]</span>
-        </div>
-        <div class="cmd-desc">See how many points you or someone else have.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!raffle</span>
-        </div>
-        <div class="cmd-desc">Creates a raffle for 1000 points.</div>
-      </div>
-
-      <div class="command-card">
-        <div class="cmd-header">
-          <span class="cmd-name">!join</span>
-        </div>
-        <div class="cmd-desc">Join an active raffle.</div>
-      </div>
+      <!-- Dynamically populated -->
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <style>
+    @keyframes pulse {
+      0% { opacity: 0.5; transform: scale(0.98); }
+      50% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0.5; transform: scale(0.98); }
+    }
+  </style>
+
+  <script type="module">
+    import { auth, db } from './firebase-config.js';
+  </script>
+  <script src="script.js" type="module"></script>
 </body>
 
 </html>

@@ -1,10 +1,15 @@
+import { db } from './firebase-config.js';
+import { collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+
 document.addEventListener('DOMContentLoaded', () => {
   const toggleBtn = document.getElementById('toggle-btn');
   const extraCommands = document.getElementById('extra-commands');
+  const mainGrid = document.getElementById('main-grid');
+  const loader = document.getElementById('loader');
 
   // Function to set staggered delays for cards by rows
-  const setStagger = (selector, baseDelay = 0) => {
-    const cards = Array.from(document.querySelectorAll(selector));
+  const setStagger = (container, baseDelay = 0) => {
+    const cards = Array.from(container.querySelectorAll('.command-card'));
     if (cards.length === 0) return;
 
     // Group by row using offsetTop
@@ -24,8 +29,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Initialize main grid stagger on load
-  setStagger('main .command-card');
+  const createCard = (cmd) => {
+    const div = document.createElement('div');
+    div.className = 'command-card';
+    div.innerHTML = `
+      <div class="cmd-header">
+        <span class="cmd-name">${cmd.name}</span>
+        ${cmd.args ? `<span class="cmd-args">${cmd.args}</span>` : ''}
+      </div>
+      <div class="cmd-desc">${cmd.description}</div>
+    `;
+    return div;
+  };
+
+  // Real-time listener for commands from Firebase
+  const q = query(collection(db, "commands"), orderBy("order", "asc"));
+  
+  onSnapshot(q, (snapshot) => {
+    mainGrid.innerHTML = '';
+    extraCommands.innerHTML = '';
+    
+    snapshot.forEach((doc) => {
+      const cmd = doc.data();
+      const card = createCard(cmd);
+      if (cmd.category === 'main') {
+        mainGrid.appendChild(card);
+      } else {
+        extraCommands.appendChild(card);
+      }
+    });
+
+    // Hide loader once data arrives
+    if (loader) loader.style.display = 'none';
+    
+    // Apply staggered animation after a tiny delay to ensure DOM is ready
+    setTimeout(() => {
+      setStagger(mainGrid);
+    }, 50);
+  });
 
   if (toggleBtn && extraCommands) {
     toggleBtn.addEventListener('click', () => {
@@ -35,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
         extraCommands.classList.remove('revealed');
         toggleBtn.textContent = 'Gamble away your points';
       } else {
-        // Set stagger first, then reveal
-        setStagger('#extra-commands .command-card');
+        // Recalculate stagger for the hidden section when revealed
+        setStagger(extraCommands);
         extraCommands.classList.add('revealed');
         toggleBtn.textContent = 'Hide';
       }
