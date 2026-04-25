@@ -13,16 +13,16 @@ import {
   doc, 
   query, 
   orderBy,
-  onSnapshot
+  onSnapshot,
+  writeBatch
 } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
-import { migrate } from './migrate.js';
 
 const loginSection = document.getElementById('login-section');
 const dashboard = document.getElementById('dashboard');
 const loginForm = document.getElementById('login-form');
 const logoutBtn = document.getElementById('logout-btn');
-const migrateBtn = document.getElementById('migrate-btn');
-const commandsList = document.getElementById('commands-list');
+const mainGrid = document.getElementById('main-grid');
+const extraGrid = document.getElementById('extra-commands');
 const commandModal = document.getElementById('command-modal');
 const addCommandBtn = document.getElementById('add-command-btn');
 const commandForm = document.getElementById('command-form');
@@ -38,9 +38,6 @@ loginForm.addEventListener('submit', (e) => {
   const password = document.getElementById('password').value;
 
   signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      loginError.style.display = 'none';
-    })
     .catch((error) => {
       console.error(error);
       loginError.style.display = 'block';
@@ -51,24 +48,49 @@ logoutBtn.addEventListener('click', () => {
   signOut(auth);
 });
 
-migrateBtn.addEventListener('click', () => {
-  migrate();
-});
-
 onAuthStateChanged(auth, (user) => {
   if (user) {
     loginSection.style.display = 'none';
     dashboard.style.display = 'block';
-    loadCommands();
+    initAdmin();
   } else {
-    loginSection.style.display = 'block';
+    loginSection.style.display = 'flex';
     dashboard.style.display = 'none';
   }
 });
 
-// --- Commands CRUD ---
+// --- Commands Logic ---
 
 let unsubscribe = null;
+
+function initAdmin() {
+  loadCommands();
+  initSortable(mainGrid);
+  initSortable(extraGrid);
+}
+
+function initSortable(container) {
+  new Sortable(container, {
+    animation: 150,
+    ghostClass: 'sortable-ghost',
+    onEnd: () => saveNewOrder(container)
+  });
+}
+
+async function saveNewOrder(container) {
+  const cards = container.querySelectorAll('.command-card');
+  const batch = writeBatch(db);
+  
+  cards.forEach((card, index) => {
+    const id = card.dataset.id;
+    const docRef = doc(db, "commands", id);
+    // Base order on grid (1-100 for main, 101-200 for gamble)
+    const base = container.id === 'main-grid' ? 0 : 100;
+    batch.update(docRef, { order: base + index + 1 });
+  });
+
+  await batch.commit();
+}
 
 function loadCommands() {
   if (unsubscribe) unsubscribe();
@@ -76,38 +98,41 @@ function loadCommands() {
   const q = query(collection(db, "commands"), orderBy("order", "asc"));
   
   unsubscribe = onSnapshot(q, (snapshot) => {
-    commandsList.innerHTML = '';
-    if (snapshot.empty) {
-      commandsList.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No commands found. Add your first one!</p>';
-      return;
-    }
+    mainGrid.innerHTML = '';
+    extraGrid.innerHTML = '';
 
     snapshot.forEach((doc) => {
       const cmd = doc.data();
       const id = doc.id;
       
-      const item = document.createElement('div');
-      item.className = 'command-item';
-      item.innerHTML = `
-        <div class="command-info">
-          <h3>${cmd.name} <span style="font-size: 0.8rem; opacity: 0.6; color: white;">(${cmd.category})</span></h3>
-          <p>${cmd.args || ''}</p>
-          <p style="color: var(--text-primary); margin-top: 5px;">${cmd.description}</p>
+      const card = document.createElement('div');
+      card.className = 'command-card';
+      card.dataset.id = id;
+      card.innerHTML = `
+        <div class="cmd-header">
+          <span class="cmd-name">${cmd.name}</span>
+          ${cmd.args ? `<span class="cmd-args">${cmd.args}</span>` : ''}
         </div>
-        <div class="action-btns">
+        <div class="cmd-desc">${cmd.description}</div>
+        <div class="admin-actions">
           <button class="admin-btn btn-small edit-btn" data-id="${id}">Edit</button>
           <button class="admin-btn btn-small btn-delete delete-btn" data-id="${id}">Delete</button>
         </div>
       `;
-      commandsList.appendChild(item);
+      
+      if (cmd.category === 'main') {
+        mainGrid.appendChild(card);
+      } else {
+        extraGrid.appendChild(card);
+      }
     });
 
-    // Add listeners to new buttons
+    // Add listeners to buttons
     document.querySelectorAll('.edit-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => openModal(e.target.dataset.id));
+      btn.onclick = (e) => { e.stopPropagation(); openModal(e.target.dataset.id); };
     });
     document.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => deleteCommand(e.target.dataset.id));
+      btn.onclick = (e) => { e.stopPropagation(); deleteCommand(e.target.dataset.id); };
     });
   });
 }
@@ -118,7 +143,6 @@ async function openModal(id = null) {
   
   if (id) {
     modalTitle.textContent = 'Edit Command';
-    // Fetch current data (could also get from local state if we kept it)
     const snapshot = await getDocs(collection(db, "commands"));
     const cmd = snapshot.docs.find(d => d.id === id).data();
     document.getElementById('cmd-name').value = cmd.name;
@@ -128,7 +152,7 @@ async function openModal(id = null) {
     document.getElementById('cmd-order').value = cmd.order || 0;
   } else {
     modalTitle.textContent = 'Add New Command';
-    document.getElementById('cmd-order').value = 0;
+    document.getElementById('cmd-order').value = 999; // Default to end
   }
   
   commandModal.style.display = 'flex';

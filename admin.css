@@ -1,55 +1,12 @@
-:root {
-  --bg-color: #0b0f19;
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --accent-color: #ef4444;
-  --accent-hover: #dc2626;
-  --accent-light: rgba(239, 68, 68, 0.15);
-  --card-bg: rgba(30, 41, 59, 0.4);
-  --card-border: rgba(255, 255, 255, 0.06);
-}
-
-body {
-  background-color: var(--bg-color);
-  color: var(--text-primary);
-  font-family: 'Outfit', sans-serif;
-  margin: 0;
+/* Admin Specific Styles */
+.login-card-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  overflow-x: hidden;
-}
-
-.admin-container {
   width: 100%;
-  max-width: 800px;
-  padding: 2rem;
-  z-index: 1;
 }
 
-/* Background blobs similar to main site */
-.background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.blob {
-  position: absolute;
-  filter: blur(100px);
-  border-radius: 50%;
-  opacity: 0.1;
-}
-
-.blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #991b1b; }
-
-/* Login Form */
 .login-card {
   background: var(--card-bg);
   backdrop-filter: blur(16px);
@@ -57,6 +14,8 @@ body {
   padding: 3rem;
   border-radius: 24px;
   text-align: center;
+  width: 100%;
+  max-width: 450px;
 }
 
 .login-card h2 {
@@ -101,7 +60,6 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   width: 100%;
-  margin-top: 1rem;
 }
 
 .admin-btn:hover {
@@ -110,72 +68,75 @@ body {
   box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
 }
 
-/* Dashboard UI */
-#dashboard {
-  display: none;
-}
+.btn-delete { background: #334155; }
+.btn-delete:hover { background: #ef4444; }
 
-.dashboard-header {
+.dashboard-header-ui {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-}
-
-.command-item {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 1.5rem;
   margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  backdrop-filter: blur(8px);
 }
 
-.command-info h3 {
-  margin: 0;
-  color: var(--accent-color);
-}
-
-.command-info p {
-  margin: 0.5rem 0 0;
+.section-title {
   color: var(--text-secondary);
   font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 2rem;
+  border-left: 3px solid var(--accent-color);
+  padding-left: 1rem;
 }
 
-.action-btns {
+/* Admin Card Modifications */
+.admin-grid .command-card {
+  cursor: grab;
+  opacity: 1; /* Override fade-in for admin view to make it snappier */
+  transform: none;
+  animation: none;
+}
+
+.admin-grid .command-card:active {
+  cursor: grabbing;
+}
+
+.admin-actions {
   display: flex;
   gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--card-border);
 }
 
 .btn-small {
   padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  width: auto;
 }
 
-.btn-delete { background: #334155; }
-.btn-delete:hover { background: #ef4444; }
+/* SortableJS Ghost Effect */
+.sortable-ghost {
+  opacity: 0.3;
+  border: 2px dashed var(--accent-color);
+}
 
-.hidden { display: none !important; }
-
-/* Add/Edit Modal Style */
+/* Modal */
 .modal {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.85);
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
 }
 
 .modal-content {
-  background: #1e293b;
-  padding: 2.5rem;
+  background: #111827;
+  padding: 3rem;
   border-radius: 24px;
   width: 90%;
-  max-width: 500px;
+  max-width: 550px;
   border: 1px solid var(--card-border);
 }
