@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     div.className = 'command-card';
     div.innerHTML = `
       <div class="cmd-header">
-        <span class="cmd-name">${cmd.name}</span>
+        <span class="cmd-name" ${cmd.aliases ? `data-aliases="${cmd.aliases}"` : ''}>${cmd.name}</span>
         ${cmd.args ? `<span class="cmd-args">${cmd.args}</span>` : ''}
       </div>
       <div class="cmd-desc">${cmd.description}</div>

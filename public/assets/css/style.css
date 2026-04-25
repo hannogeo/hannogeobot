@@ -148,6 +148,37 @@ body {
   padding: 0.3rem 1rem;
   border-radius: 8px;
   box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.2);
+  position: relative;
+  cursor: help;
+}
+
+.cmd-name[data-aliases]:hover::after {
+  content: "Aliases: " attr(data-aliases);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  z-index: 100;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--card-border);
+  font-weight: 500;
+}
+
+.cmd-name[data-aliases]:hover::before {
+  content: "";
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #1e293b;
+  z-index: 100;
 }
 
 .cmd-args {

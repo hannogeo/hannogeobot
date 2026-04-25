@@ -110,7 +110,7 @@ function loadCommands() {
       card.dataset.id = id;
       card.innerHTML = `
         <div class="cmd-header">
-          <span class="cmd-name">${cmd.name}</span>
+          <span class="cmd-name" ${cmd.aliases ? `data-aliases="${cmd.aliases}"` : ''}>${cmd.name}</span>
           ${cmd.args ? `<span class="cmd-args">${cmd.args}</span>` : ''}
         </div>
         <div class="cmd-desc">${cmd.description}</div>
@@ -146,6 +146,7 @@ async function openModal(id = null) {
     const snapshot = await getDocs(collection(db, "commands"));
     const cmd = snapshot.docs.find(d => d.id === id).data();
     document.getElementById('cmd-name').value = cmd.name;
+    document.getElementById('cmd-aliases').value = cmd.aliases || '';
     document.getElementById('cmd-args').value = cmd.args || '';
     document.getElementById('cmd-desc').value = cmd.description;
     document.getElementById('cmd-category').value = cmd.category;
@@ -166,6 +167,7 @@ commandForm.addEventListener('submit', async (e) => {
   const id = document.getElementById('command-id').value;
   const data = {
     name: document.getElementById('cmd-name').value,
+    aliases: document.getElementById('cmd-aliases').value,
     args: document.getElementById('cmd-args').value,
     description: document.getElementById('cmd-desc').value,
     category: document.getElementById('cmd-category').value,
