@@ -1,5 +1,5 @@
 import { db } from './firebase-config.js';
-import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+import { collection, addDoc, getDocs, deleteDoc, doc, writeBatch } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
 
 const currentCommands = [
   // Main Grid
@@ -29,24 +29,36 @@ const currentCommands = [
 ];
 
 export async function migrate() {
-  const snapshot = await getDocs(collection(db, "commands"));
-  if (!snapshot.empty) {
-    if (!confirm("Your database already has commands. Should we clear it first to reset the order? (Recommended)")) {
-      return;
+  try {
+    const snapshot = await getDocs(collection(db, "commands"));
+    
+    if (!snapshot.empty) {
+      if (!confirm(`Found ${snapshot.size} existing commands. Clear them and reset the order?`)) {
+        return;
+      }
+      
+      const batch = writeBatch(db);
+      snapshot.docs.forEach((d) => {
+        batch.delete(doc(db, "commands", d.id));
+      });
+      await batch.commit();
+      console.log("Database cleared.");
     }
-    // Delete existing
-    for (const d of snapshot.docs) {
-      await deleteDoc(doc(db, "commands", d.id));
-    }
-  }
 
-  console.log("Starting migration...");
-  for (const cmd of currentCommands) {
-    await addDoc(collection(db, "commands"), {
-      ...cmd,
-      createdAt: new Date()
+    console.log("Starting migration...");
+    const addBatch = writeBatch(db);
+    currentCommands.forEach((cmd) => {
+      const newDocRef = doc(collection(db, "commands"));
+      addBatch.set(newDocRef, {
+        ...cmd,
+        createdAt: new Date()
+      });
     });
-    console.log(`Added: ${cmd.name}`);
+    
+    await addBatch.commit();
+    alert("Migration complete! Your commands are now perfectly ordered.");
+  } catch (err) {
+    console.error("Migration failed:", err);
+    alert("Migration failed: " + err.message + "\n\nMake sure you have set your Firestore Rules to allow writes if authenticated!");
   }
-  alert("Migration complete! The order is now restored.");
 }
